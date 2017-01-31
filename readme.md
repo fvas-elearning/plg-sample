@@ -5,7 +5,7 @@ __Published:__ 01 Sep 2016
 __Web:__ <http://www.tropotek.com/>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
   
-An sample Plugin for the new Tk2 framework. Use this to create your own plugins.
+An sample Plugin for the new EMS III System. Use this to create your own plugins.
 
 ## Contents
 
@@ -26,7 +26,7 @@ Or add the following to your composer.json file:
 
 ```json
 {
-  "ttek-plg/sample": "~2.0"
+  "ttek-plg/sample": "~1.0"
 }
 ```
 

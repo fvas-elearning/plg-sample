@@ -1,5 +1,5 @@
 <?php
-namespace Ems;
+namespace sample;
 
 
 use Tk\EventDispatcher\EventDispatcher;
@@ -47,7 +47,7 @@ class Plugin extends \App\Plugin\Iface
     function doInit()
     {
         // TODO: Implement doInit() method.
-        include dirname(dirname(__FILE__)).'/config.php';
+        include dirname(__FILE__) . '/config.php';
 
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \App\Factory::getEventDispatcher();

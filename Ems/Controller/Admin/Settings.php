@@ -36,8 +36,8 @@ class Settings extends Iface
         parent::__construct();
         $this->setPageTitle('Example Plugin Settings');
 
-        /** @var \Ems\Plugin $plugin */
-        $plugin = \Ems\Plugin::getInstance();
+        /** @var \sample\Plugin $plugin */
+        $plugin = \sample\Plugin::getInstance();
         $this->data = \Tk\Db\Data::create($plugin->getPluginName());
     }
 

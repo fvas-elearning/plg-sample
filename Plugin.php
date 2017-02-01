@@ -49,6 +49,8 @@ class Plugin extends \App\Plugin\Iface
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
 
+        $this->setAccess(self::ACCESS_SYSTEM);
+        
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \App\Factory::getEventDispatcher();
         if (!$dispatcher) 

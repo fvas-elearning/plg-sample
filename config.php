@@ -10,7 +10,7 @@ $config = \Tk\Config::getInstance();
 $routes = $config['site.routes'];
 
 $params = array('access' => \App\Db\User::ROLE_ADMIN);
-$routes->add('admin-sample-settings', new \Tk\Routing\Route('/admin/sample/settings.html', 'Ems\Controller\Admin\Settings::doDefault', $params));
+$routes->add('admin-sample-settings', new \Tk\Routing\Route('/admin/sample/settings.html', 'Ems\Controller\SystemSettings::doDefault', $params));
 
 
 

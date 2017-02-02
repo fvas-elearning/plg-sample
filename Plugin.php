@@ -22,18 +22,10 @@ class Plugin extends \App\Plugin\Iface
      */
     static function getInstance()
     {
-        return \Tk\Plugin\Factory::getInstance()->getPlugin('example');
+        return \Tk\Plugin\Factory::getInstance()->getPlugin('sample');
     }
 
-    /**
-     * @return \Tk\Uri
-     */
-    public function getSettingsUrl()
-    {
-        return \Tk\Uri::create('/admin/sample/settings.html');
-    }
-    
-    
+
     // ---- \Tk\Plugin\Iface Interface Methods ----
     
     
@@ -48,7 +40,7 @@ class Plugin extends \App\Plugin\Iface
     {
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
-
+//vd('Sample::doInit()');
         $this->setAccess(self::ACCESS_SYSTEM);
         
         /** @var EventDispatcher $dispatcher */
@@ -69,11 +61,11 @@ class Plugin extends \App\Plugin\Iface
     function doActivate()
     {
         // TODO: Implement doActivate() method.
-        
+
         // Init Settings
         $data = \Tk\Db\Data::create($this->getPluginName());
-        $data->set('plugin.title', 'Untitled Plugin');
-        $data->set('plugin.email', 'null@example.com');
+        $data->set('plugin.title', 'EMS III Example Plugin');
+        $data->set('plugin.email', 'null@unimelb.edu.au');
         $data->save();
     }
 
@@ -91,5 +83,13 @@ class Plugin extends \App\Plugin\Iface
         $data = \Tk\Db\Data::create($this->getPluginName());
         $data->clear();
         $data->save();
+    }
+
+    /**
+     * @return \Tk\Uri
+     */
+    public function getSettingsUrl()
+    {
+        return \Tk\Uri::create('/admin/sample/settings.html');
     }
 }

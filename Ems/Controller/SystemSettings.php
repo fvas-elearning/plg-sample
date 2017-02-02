@@ -1,5 +1,5 @@
 <?php
-namespace Ems\Controller\Admin;
+namespace Ems\Controller;
 
 use Tk\Request;
 use Tk\Form;
@@ -14,7 +14,7 @@ use \App\Controller\Iface;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Settings extends Iface
+class SystemSettings extends Iface
 {
 
     /**
@@ -38,6 +38,7 @@ class Settings extends Iface
 
         /** @var \sample\Plugin $plugin */
         $plugin = \sample\Plugin::getInstance();
+        vd($plugin->getPluginName());
         $this->data = \Tk\Db\Data::create($plugin->getPluginName());
     }
 

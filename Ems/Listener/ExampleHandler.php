@@ -51,6 +51,7 @@ class ExampleHandler implements SubscriberInterface
 
 
 
+
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -79,6 +80,5 @@ class ExampleHandler implements SubscriberInterface
             KernelEvents::CONTROLLER => 'onControllerAccess'
         );
     }
-    
     
 }

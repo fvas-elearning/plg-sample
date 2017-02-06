@@ -22,7 +22,7 @@ class Plugin extends \App\Plugin\Iface
      */
     static function getInstance()
     {
-        return \Tk\Plugin\Factory::getInstance()->getPlugin('sample');
+        return \App\Plugin\Factory::getInstance()->getPlugin('sample');
     }
 
 
@@ -40,14 +40,16 @@ class Plugin extends \App\Plugin\Iface
     {
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
-//vd('Sample::doInit()');
-        $this->setAccess(self::ACCESS_SYSTEM);
         
+        $this->getPluginFactory()->registerInstitutionPlugin($this);
+        vd('--');
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \App\Factory::getEventDispatcher();
-        if (!$dispatcher) 
-            throw new \Tk\Exception('Event Dispatcher not found.');
         $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler());
+        
+        
+        
+        
         
     }
     
@@ -91,5 +93,26 @@ class Plugin extends \App\Plugin\Iface
     public function getSettingsUrl()
     {
         return \Tk\Uri::create('/admin/sample/settings.html');
+    }
+
+    /**
+     * Get the course settings URL, if null then there is none
+     *
+     * @return string|\Tk\Uri|null
+     */
+    public function getClientSettingsUrl()
+    {
+        // TODO: Implement getClientSettingsUrl() method.
+        return \Tk\Uri::create('/client/sample/settings.html');
+    }
+
+    /**
+     * Get the course settings URL, if null then there is none
+     *
+     * @return string|\Tk\Uri|null
+     */
+    public function getCourseSettingsUrl()
+    {
+        // TODO: Implement getCourseSettingsUrl() method.
     }
 }

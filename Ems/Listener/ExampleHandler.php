@@ -28,8 +28,6 @@ class ExampleHandler implements SubscriberInterface
         //$this->plugin = \Eg\Plugin::getInstance();
         //vd('Example: onSystemInit');
 
-
-
     }
 
     /**

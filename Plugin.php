@@ -41,8 +41,9 @@ class Plugin extends \App\Plugin\Iface
     {
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
-        
+
         $this->getPluginFactory()->registerInstitutionPlugin($this);
+        $this->getPluginFactory()->registerCoursePlugin($this);
 
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();

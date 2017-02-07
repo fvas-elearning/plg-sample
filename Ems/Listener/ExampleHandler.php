@@ -28,6 +28,9 @@ class ExampleHandler implements SubscriberInterface
         //$this->plugin = \Eg\Plugin::getInstance();
         //vd('Example: onSystemInit');
 
+        //vd($event->getRequest()->getAttribute('courseCode'));
+        //vd(\Tk\Config::getInstance()->getCourse());
+
     }
 
     /**
@@ -39,22 +42,17 @@ class ExampleHandler implements SubscriberInterface
     {
         //vd('sample: onControllerAccess');
         $plugin = \sample\Plugin::getInstance();
+        $config = $plugin->getConfig();
 
-        $institution = $plugin->getConfig()->getUser()->getInstitution();
+        $institution = $config->getInstitution();
         if($institution && $plugin->isInstitutionEnabled($institution->getId())) {
-            vd('Plugin init for institution stuff..');
+            vd('Plugin execution for institution stuff: ' . $institution->name);
         }
 
-        //$course = ???? Only available once the page is on a course page?
-        // Is this the best solution to this?????
-
-        // What should happen if the plugin is enabled or disabled
-        // should this be left up to the plugin entirly???  (preferred, at this stage ??)
-
-        // Should the system run the plugin if only certan conditions are met,
-        // if this is the case it could be a problem as the do init needs to happen early.
-
-
+        $course = $config->getCourse();
+        if ($course && $plugin->isCourseEnabled($course->getId())) {
+            vd('Plugin execution for course stuff: ' . $course->name);
+        }
 
     }
 
@@ -94,7 +92,7 @@ class ExampleHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => array('onSystemInit', 0),
+            KernelEvents::REQUEST => array('onSystemInit', -10),
             KernelEvents::CONTROLLER => array('onControllerAccess', 0),
             AppEvents::SHOW => array('onControllerShow', 0)
         );

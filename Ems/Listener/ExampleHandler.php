@@ -47,11 +47,11 @@ class ExampleHandler implements SubscriberInterface
             vd('Plugin init for institution stuff..');
         }
 
-        //$course = ????
+        //$course = ???? Only available once the page is on a course page?
         // Is this the best solution to this?????
 
         // What should happen if the plugin is enabled or disabled
-        // should this be left up to the plugin entirly???  (preferred ??)
+        // should this be left up to the plugin entirly???  (preferred, at this stage ??)
 
         // Should the system run the plugin if only certan conditions are met,
         // if this is the case it could be a problem as the do init needs to happen early.

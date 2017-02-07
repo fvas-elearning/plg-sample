@@ -15,14 +15,15 @@ use Tk\EventDispatcher\EventDispatcher;
 class Plugin extends \App\Plugin\Iface
 {
 
+
     /**
      * A helper method to get the Plugin instance globally
-     * 
-     * @return \Tk\Plugin\Iface
+     *
+     * @return \App\Plugin\Iface
      */
     static function getInstance()
     {
-        return \App\Plugin\Factory::getInstance()->getPlugin('sample');
+        return \Tk\Config::getInstance()->getPluginFactory()->getPlugin('sample');
     }
 
 
@@ -42,15 +43,11 @@ class Plugin extends \App\Plugin\Iface
         include dirname(__FILE__) . '/config.php';
         
         $this->getPluginFactory()->registerInstitutionPlugin($this);
-        vd('--');
+
         /** @var EventDispatcher $dispatcher */
-        $dispatcher = \App\Factory::getEventDispatcher();
+        $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
         $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler());
-        
-        
-        
-        
-        
+
     }
     
     /**
@@ -65,7 +62,7 @@ class Plugin extends \App\Plugin\Iface
         // TODO: Implement doActivate() method.
 
         // Init Settings
-        $data = \Tk\Db\Data::create($this->getPluginName());
+        $data = \Tk\Db\Data::create($this->getName());
         $data->set('plugin.title', 'EMS III Example Plugin');
         $data->set('plugin.email', 'null@unimelb.edu.au');
         $data->save();
@@ -82,7 +79,7 @@ class Plugin extends \App\Plugin\Iface
         // TODO: Implement doDeactivate() method.
         
         // Delete any setting in the DB
-        $data = \Tk\Db\Data::create($this->getPluginName());
+        $data = \Tk\Db\Data::create($this->getName());
         $data->clear();
         $data->save();
     }
@@ -92,7 +89,7 @@ class Plugin extends \App\Plugin\Iface
      */
     public function getSettingsUrl()
     {
-        return \Tk\Uri::create('/admin/sample/settings.html');
+        return \Tk\Uri::create('/sample/adminSettings.html');
     }
 
     /**
@@ -100,10 +97,10 @@ class Plugin extends \App\Plugin\Iface
      *
      * @return string|\Tk\Uri|null
      */
-    public function getClientSettingsUrl()
+    public function getInstitutionSettingsUrl()
     {
         // TODO: Implement getClientSettingsUrl() method.
-        return \Tk\Uri::create('/client/sample/settings.html');
+        return \Tk\Uri::create('/sample/institutionSettings.html');
     }
 
     /**
@@ -114,5 +111,6 @@ class Plugin extends \App\Plugin\Iface
     public function getCourseSettingsUrl()
     {
         // TODO: Implement getCourseSettingsUrl() method.
+        return \Tk\Uri::create('/sample/courseSettings.html');
     }
 }

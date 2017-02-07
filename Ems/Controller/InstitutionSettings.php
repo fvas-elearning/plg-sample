@@ -14,7 +14,7 @@ use \App\Controller\Iface;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class SystemSettings extends Iface
+class InstitutionSettings extends Iface
 {
 
     /**
@@ -23,22 +23,29 @@ class SystemSettings extends Iface
     protected $form = null;
 
     /**
+     * @var \App\Db\Institution
+     */
+    protected $institution = null;
+
+    /**
      * @var \Tk\Db\Data|null
      */
     protected $data = null;
 
-    
+
     /**
      *
      */
     public function __construct()
     {
         parent::__construct();
-        $this->setPageTitle('Example Plugin Settings');
+        $this->setPageTitle('Sample Plugin - Institution Settings');
 
         /** @var \sample\Plugin $plugin */
         $plugin = \sample\Plugin::getInstance();
-        $this->data = \Tk\Db\Data::create($plugin->getName());
+        $this->institution = $this->getUser()->getInstitution();
+        $this->data = \Tk\Db\Data::create($plugin->getName() . '.institution', $this->institution->getId());
+
     }
 
     /**
@@ -89,7 +96,7 @@ class SystemSettings extends Iface
         
         \Ts\Alert::addSuccess('Site settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \Tk\Uri::create('/admin/plugins.html')->redirect();
+            \Tk\Uri::create('/client/plugins.html')->redirect();
         }
         \Tk\Uri::create()->redirect();
     }

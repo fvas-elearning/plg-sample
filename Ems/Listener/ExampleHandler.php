@@ -27,6 +27,37 @@ class ExampleHandler implements SubscriberInterface
     {
         //$this->plugin = \Eg\Plugin::getInstance();
         //vd('Example: onSystemInit');
+
+
+
+    }
+
+    /**
+     * Check the user has access to this controller
+     *
+     * @param ControllerEvent $event
+     */
+    public function onControllerAccess(ControllerEvent $event)
+    {
+        //vd('sample: onControllerAccess');
+        $plugin = \sample\Plugin::getInstance();
+
+        $institution = $plugin->getConfig()->getUser()->getInstitution();
+        if($institution && $plugin->isInstitutionEnabled($institution->getId())) {
+            vd('Plugin init for institution stuff..');
+        }
+
+        //$course = ????
+        // Is this the best solution to this?????
+
+        // What should happen if the plugin is enabled or disabled
+        // should this be left up to the plugin entirly???  (preferred ??)
+
+        // Should the system run the plugin if only certan conditions are met,
+        // if this is the case it could be a problem as the do init needs to happen early.
+
+
+
     }
 
     /**
@@ -37,16 +68,6 @@ class ExampleHandler implements SubscriberInterface
     public function onControllerShow(Event $event)
     {
         //vd('Example: onControllerShow');
-    }
-
-    /**
-     * Check the user has access to this controller
-     *
-     * @param ControllerEvent $event
-     */
-    public function onControllerAccess(ControllerEvent $event)
-    {
-        //vd('Example: onControllerAccess');
     }
 
 
@@ -75,9 +96,9 @@ class ExampleHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            AppEvents::SHOW => 'onControllerShow',
-            KernelEvents::REQUEST => 'onSystemInit',
-            KernelEvents::CONTROLLER => 'onControllerAccess'
+            KernelEvents::REQUEST => array('onSystemInit', 0),
+            KernelEvents::CONTROLLER => array('onControllerAccess', 0),
+            AppEvents::SHOW => array('onControllerShow', 0)
         );
     }
     

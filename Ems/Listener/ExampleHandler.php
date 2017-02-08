@@ -47,13 +47,13 @@ class ExampleHandler implements SubscriberInterface
         $institution = $config->getInstitution();
         if($institution && $plugin->isInstitutionEnabled($institution->getId())) {
             //vd('Plugin execution for institution stuff: ' . $institution->name);
-            $config->getLog()->info('Plugin execution for institution stuff: ' . $institution->name);
+            $config->getLog()->debug($plugin->getname() . ': Plugin execution for institution stuff: ' . $institution->name);
         }
 
         $course = $config->getCourse();
         if ($course && $plugin->isCourseEnabled($course->getId())) {
             //vd('Plugin execution for course stuff: ' . $course->name);
-            $config->getLog()->info('Plugin execution for course stuff: ' . $course->name);
+            $config->getLog()->debug($plugin->getname() . ': Plugin execution for course stuff: ' . $course->name);
         }
 
     }

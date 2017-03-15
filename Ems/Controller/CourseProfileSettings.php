@@ -14,7 +14,7 @@ use \App\Controller\Iface;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class CourseSettings extends Iface
+class CourseProfileSettings extends Iface
 {
 
     /**
@@ -28,9 +28,9 @@ class CourseSettings extends Iface
     protected $data = null;
 
     /**
-     * @var \App\Db\Course
+     * @var \App\Db\CourseProfile
      */
-    private $course = null;
+    private $profile = null;
 
 
     /**
@@ -39,7 +39,7 @@ class CourseSettings extends Iface
     public function __construct()
     {
         parent::__construct();
-        $this->setPageTitle('Sample Plugin - Course Settings');
+        $this->setPageTitle('Sample Plugin - Course Profile Settings');
     }
 
     /**
@@ -53,9 +53,8 @@ class CourseSettings extends Iface
         /** @var \sample\Plugin $plugin */
         $plugin = \sample\Plugin::getInstance();
 
-        $this->course = \App\Db\CourseMap::create()->find($request->get('zoneId'));
-        //$this->course = \App\Factory::getCourse();
-        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course', $this->course->getId());
+        $this->profile = \App\Db\CourseProfileMap::create()->find($request->get('zoneId'));
+        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course.profile', $this->profile->getId());
 
         $this->form = new Form('formEdit', $request);
 
@@ -97,7 +96,7 @@ class CourseSettings extends Iface
         
         \Tk\Alert::addSuccess('Settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \App\Uri::createHomeUrl('/course/plugins.html')->set('courseId', $this->course->getId())->redirect();
+            \App\Uri::createHomeUrl('/course/profilePlugins.html')->set('courseProfileId', $this->profile->getId())->redirect();
         }
         \Tk\Uri::create()->redirect();
     }
@@ -147,7 +146,7 @@ class CourseSettings extends Iface
     <div class="panel panel-default">
       <div class="panel-heading">
         <i class="fa fa-cog"></i>
-        Site Settings
+        Settings
       </div>
       <div class="panel-body">
         <div class="row">

@@ -18,6 +18,16 @@ use Tk\EventDispatcher\Event;
 class ExampleHandler implements SubscriberInterface
 {
 
+    private $zoneName = '';
+    private $zoneId = 0;
+
+
+    public function __construct($zoneName, $zoneId)
+    {
+        $this->zoneName = $zoneName;
+        $this->zoneId = (int)$zoneId;
+    }
+
 
     /**
      *
@@ -40,21 +50,9 @@ class ExampleHandler implements SubscriberInterface
      */
     public function onControllerAccess(ControllerEvent $event)
     {
-        //vd('sample: onControllerAccess');
         $plugin = \sample\Plugin::getInstance();
         $config = $plugin->getConfig();
-
-        $institution = $config->getInstitution();
-        if($institution && $plugin->isInstitutionEnabled($institution->getId())) {
-            //vd('Plugin execution for institution stuff: ' . $institution->name);
-            $config->getLog()->debug($plugin->getname() . ': Plugin execution for institution stuff: ' . $institution->name);
-        }
-
-        $course = $config->getCourse();
-        if ($course && $plugin->isCourseEnabled($course->getId())) {
-            //vd('Plugin execution for course stuff: ' . $course->name);
-            $config->getLog()->debug($plugin->getname() . ': Plugin execution for course stuff: ' . $course->name);
-        }
+        $config->getLog()->warning($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
 
     }
 
@@ -65,7 +63,9 @@ class ExampleHandler implements SubscriberInterface
      */
     public function onControllerShow(Event $event)
     {
-        //vd('Example: onControllerShow');
+        $plugin = \sample\Plugin::getInstance();
+        $config = $plugin->getConfig();
+        $config->getLog()->warning($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
     }
 
 

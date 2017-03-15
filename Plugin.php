@@ -41,13 +41,34 @@ class Plugin extends \App\Plugin\Iface
     {
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
+        $config = $this->getConfig();
 
-        $this->getPluginFactory()->registerInstitutionPlugin($this);
-        $this->getPluginFactory()->registerCoursePlugin($this);
+        // Register the plugin for the different client areas if they are to be enabled/disabled/configured by those roles.
+        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_CLIENT);
+        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_COURSE_PROFILE);
+        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_COURSE);
 
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
-        $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler());
+
+        $institution = \App\Factory::getInstitution();
+        if($institution && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_CLIENT, $institution->getId())) {
+            $config->getLog()->debug($this->getName() . ': Sample init client plugin stuff: ' . $institution->name);
+            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(\App\Plugin\Iface::ZONE_CLIENT, $institution->getId()));
+        }
+        /** @var \App\Db\Course $course */
+        $course = \App\Factory::getCourse();
+        if ($course && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_COURSE, $course->getId())) {
+            $config->getLog()->debug($this->getName() . ': Sample init course plugin stuff: ' . $course->name);
+            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(\App\Plugin\Iface::ZONE_COURSE, $course->getId()));
+
+            $profile = $course->getProfile();
+            if ($profile && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_COURSE_PROFILE, $profile->getId())) {
+                $config->getLog()->debug($this->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
+                $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(\App\Plugin\Iface::ZONE_COURSE_PROFILE, $profile->getId()));
+            }
+        }
+
 
     }
     
@@ -86,6 +107,24 @@ class Plugin extends \App\Plugin\Iface
     }
 
     /**
+     * Get the course settings URL, if null then there is none
+     *
+     * @return string|\Tk\Uri|null
+     */
+    public function getZoneSettingsUrl($zoneName)
+    {
+        switch ($zoneName) {
+            case \App\Plugin\Iface::ZONE_CLIENT:
+                return \Tk\Uri::create('/sample/institutionSettings.html');
+            case \App\Plugin\Iface::ZONE_COURSE_PROFILE:
+                return \Tk\Uri::create('/sample/courseProfileSettings.html');
+            case \App\Plugin\Iface::ZONE_COURSE:
+                return \Tk\Uri::create('/sample/courseSettings.html');
+        }
+        return null;
+    }
+
+    /**
      * @return \Tk\Uri
      */
     public function getSettingsUrl()
@@ -93,25 +132,4 @@ class Plugin extends \App\Plugin\Iface
         return \Tk\Uri::create('/sample/adminSettings.html');
     }
 
-    /**
-     * Get the course settings URL, if null then there is none
-     *
-     * @return string|\Tk\Uri|null
-     */
-    public function getInstitutionSettingsUrl()
-    {
-        // TODO: Implement getClientSettingsUrl() method.
-        return \Tk\Uri::create('/sample/institutionSettings.html');
-    }
-
-    /**
-     * Get the course settings URL, if null then there is none
-     *
-     * @return string|\Tk\Uri|null
-     */
-    public function getCourseSettingsUrl()
-    {
-        // TODO: Implement getCourseSettingsUrl() method.
-        return \Tk\Uri::create('/sample/courseSettings.html');
-    }
 }

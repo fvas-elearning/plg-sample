@@ -2,7 +2,7 @@
 namespace sample;
 
 
-use Tk\EventDispatcher\EventDispatcher;
+use Tk\EventDispatcher\Dispatcher;
 
 
 /**
@@ -48,7 +48,7 @@ class Plugin extends \App\Plugin\Iface
         $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_COURSE_PROFILE);
         $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_COURSE);
 
-        /** @var EventDispatcher $dispatcher */
+        /** @var Dispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
 
         $institution = \App\Factory::getInstitution();

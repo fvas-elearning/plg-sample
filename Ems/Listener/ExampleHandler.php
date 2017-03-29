@@ -1,7 +1,7 @@
 <?php
 namespace Ems\Listener;
 
-use Tk\EventDispatcher\SubscriberInterface;
+use Tk\EventDispatcher\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
@@ -15,7 +15,7 @@ use Tk\EventDispatcher\Event;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class ExampleHandler implements SubscriberInterface
+class ExampleHandler implements Subscriber
 {
 
     private $zoneName = '';

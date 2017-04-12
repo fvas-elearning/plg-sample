@@ -28,7 +28,7 @@ class CourseProfileSettings extends Iface
     protected $data = null;
 
     /**
-     * @var \App\Db\CourseProfile
+     * @var \App\Db\Profile
      */
     private $profile = null;
 
@@ -53,7 +53,7 @@ class CourseProfileSettings extends Iface
         /** @var \sample\Plugin $plugin */
         $plugin = \sample\Plugin::getInstance();
 
-        $this->profile = \App\Db\CourseProfileMap::create()->find($request->get('zoneId'));
+        $this->profile = \App\Db\ProfileMap::create()->find($request->get('zoneId'));
         $this->data = \Tk\Db\Data::create($plugin->getName() . '.course.profile', $this->profile->getId());
 
         $this->form = new Form('formEdit', $request);

@@ -57,7 +57,8 @@ class CourseSettings extends Iface
         //$this->course = \App\Factory::getCourse();
         $this->data = \Tk\Db\Data::create($plugin->getName() . '.course', $this->course->getId());
 
-        $this->form = new Form('formEdit', $request);
+        $this->form = \App\Factory::createForm('formEdit');
+        $this->form->setParam('renderer', \App\Factory::createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
@@ -112,8 +113,7 @@ class CourseSettings extends Iface
         $template = $this->getTemplate();
         
         // Render the form
-        $fren = new \Tk\Form\Renderer\Dom($this->form);
-        $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
+        $template->insertTemplate($this->form->getId(), $this->form->getParam('renderer')->show()->getTemplate());
 
         return $this->getPage()->setPageContent($template);
     }

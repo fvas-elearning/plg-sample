@@ -1,12 +1,12 @@
 <?php
 namespace Ems\Listener;
 
-use Tk\EventDispatcher\Subscriber;
+use Tk\Event\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
 use App\AppEvents;
-use Tk\EventDispatcher\Event;
+use Tk\Event\Event;
 
 /**
  * Class StartupHandler

@@ -2,7 +2,7 @@
 namespace sample;
 
 
-use Tk\EventDispatcher\Dispatcher;
+use Tk\Event\Dispatcher;
 
 
 /**
@@ -12,14 +12,17 @@ use Tk\EventDispatcher\Dispatcher;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Plugin extends \App\Plugin\Iface
+class Plugin extends \Tk\Plugin\Iface
 {
 
+    const ZONE_INSTITUTION = 'institution';
+    const ZONE_COURSE_PROFILE = 'profile';
+    const ZONE_COURSE = 'course';
 
     /**
      * A helper method to get the Plugin instance globally
      *
-     * @return \App\Plugin\Iface
+     * @return \Tk\Plugin\Iface
      */
     static function getInstance()
     {
@@ -44,32 +47,30 @@ class Plugin extends \App\Plugin\Iface
         $config = $this->getConfig();
 
         // Register the plugin for the different client areas if they are to be enabled/disabled/configured by those roles.
-        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_CLIENT);
-        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_COURSE_PROFILE);
-        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_COURSE);
+        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
+        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_COURSE_PROFILE);
+        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_COURSE);
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
 
         $institution = \App\Factory::getInstitution();
-        if($institution && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_CLIENT, $institution->getId())) {
+        if($institution && $this->isZonePluginEnabled(self::ZONE_INSTITUTION, $institution->getId())) {
             $config->getLog()->debug($this->getName() . ': Sample init client plugin stuff: ' . $institution->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(\App\Plugin\Iface::ZONE_CLIENT, $institution->getId()));
+            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(self::ZONE_INSTITUTION, $institution->getId()));
         }
         /** @var \App\Db\Course $course */
         $course = \App\Factory::getCourse();
-        if ($course && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_COURSE, $course->getId())) {
+        if ($course && $this->isZonePluginEnabled(self::ZONE_COURSE, $course->getId())) {
             $config->getLog()->debug($this->getName() . ': Sample init course plugin stuff: ' . $course->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(\App\Plugin\Iface::ZONE_COURSE, $course->getId()));
+            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(self::ZONE_COURSE, $course->getId()));
 
             $profile = $course->getProfile();
-            if ($profile && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_COURSE_PROFILE, $profile->getId())) {
+            if ($profile && $this->isZonePluginEnabled(self::ZONE_COURSE_PROFILE, $profile->getId())) {
                 $config->getLog()->debug($this->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
-                $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(\App\Plugin\Iface::ZONE_COURSE_PROFILE, $profile->getId()));
+                $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(self::ZONE_COURSE_PROFILE, $profile->getId()));
             }
         }
-
-
     }
     
     /**
@@ -114,11 +115,11 @@ class Plugin extends \App\Plugin\Iface
     public function getZoneSettingsUrl($zoneName)
     {
         switch ($zoneName) {
-            case \App\Plugin\Iface::ZONE_CLIENT:
+            case self::ZONE_INSTITUTION:
                 return \Tk\Uri::create('/sample/institutionSettings.html');
-            case \App\Plugin\Iface::ZONE_COURSE_PROFILE:
+            case self::ZONE_COURSE_PROFILE:
                 return \Tk\Uri::create('/sample/courseProfileSettings.html');
-            case \App\Plugin\Iface::ZONE_COURSE:
+            case self::ZONE_COURSE:
                 return \Tk\Uri::create('/sample/courseSettings.html');
         }
         return null;

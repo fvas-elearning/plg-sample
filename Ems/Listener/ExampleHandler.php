@@ -69,8 +69,6 @@ class ExampleHandler implements Subscriber
     }
 
 
-
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *

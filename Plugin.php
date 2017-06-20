@@ -1,7 +1,6 @@
 <?php
 namespace sample;
 
-
 use Tk\Event\Dispatcher;
 
 
@@ -42,9 +41,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     function doInit()
     {
-        // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
-        $config = $this->getConfig();
 
         // Register the plugin for the different client areas if they are to be enabled/disabled/configured by those roles.
         $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
@@ -53,24 +50,7 @@ class Plugin extends \Tk\Plugin\Iface
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
-
-        $institution = \App\Factory::getInstitution();
-        if($institution && $this->isZonePluginEnabled(self::ZONE_INSTITUTION, $institution->getId())) {
-            $config->getLog()->debug($this->getName() . ': Sample init client plugin stuff: ' . $institution->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(self::ZONE_INSTITUTION, $institution->getId()));
-        }
-        /** @var \App\Db\Course $course */
-        $course = \App\Factory::getCourse();
-        if ($course && $this->isZonePluginEnabled(self::ZONE_COURSE, $course->getId())) {
-            $config->getLog()->debug($this->getName() . ': Sample init course plugin stuff: ' . $course->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(self::ZONE_COURSE, $course->getId()));
-
-            $profile = $course->getProfile();
-            if ($profile && $this->isZonePluginEnabled(self::ZONE_COURSE_PROFILE, $profile->getId())) {
-                $config->getLog()->debug($this->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
-                $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(self::ZONE_COURSE_PROFILE, $profile->getId()));
-            }
-        }
+        $dispatcher->addSubscriber(new \Ems\Listener\SetupHandler());
     }
     
     /**

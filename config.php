@@ -12,7 +12,7 @@ $routes = $config['site.routes'];
 $params = array('role' => 'admin');
 $routes->add('Sample Admin Settings', new \Tk\Routing\Route('/sample/adminSettings.html', 'Ems\Controller\SystemSettings::doDefault', $params));
 
-$params = array('role' => 'client');
+$params = array('role' => array('admin', 'client'));
 $routes->add('Sample Institution Settings', new \Tk\Routing\Route('/sample/institutionSettings.html', 'Ems\Controller\InstitutionSettings::doDefault', $params));
 
 $params = array('role' => array('client', 'staff'));

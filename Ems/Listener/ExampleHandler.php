@@ -52,7 +52,7 @@ class ExampleHandler implements Subscriber
     {
         $plugin = \sample\Plugin::getInstance();
         $config = $plugin->getConfig();
-        $config->getLog()->warning($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
+        $config->getLog()->info($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
 
     }
 
@@ -65,7 +65,7 @@ class ExampleHandler implements Subscriber
     {
         $plugin = \sample\Plugin::getInstance();
         $config = $plugin->getConfig();
-        $config->getLog()->warning($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
+        $config->getLog()->info($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
     }
 
 

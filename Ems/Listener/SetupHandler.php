@@ -30,7 +30,7 @@ class SetupHandler implements Subscriber
         $dispatcher = $config->getEventDispatcher();
         /** @var \App\Db\Institution $institution */
         $institution = $config->getInstitution();
-        $plugin = \Lti\Plugin::getInstance();
+        $plugin = \sample\Plugin::getInstance();
 
         if($institution && $plugin->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
             $config->getLog()->debug($plugin->getName() . ': Sample init client plugin stuff: ' . $institution->name);

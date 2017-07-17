@@ -14,7 +14,7 @@ use App\Controller\Iface;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class CourseProfileSettings extends Iface
+class ProfileSettings extends Iface
 {
 
     /**

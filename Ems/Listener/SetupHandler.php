@@ -23,30 +23,28 @@ class SetupHandler implements Subscriber
          *  As any events fired before this event do not have access to
          *  the institution object, unless you manually save the id in the
          *  session on first page load?
-         *
          */
+
         $config = \Tk\Config::getInstance();
-        /** @var \Tk\Event\Dispatcher $dispatcher */
-        $dispatcher = $config->getEventDispatcher();
-        /** @var \App\Db\Institution $institution */
-        $institution = $config->getInstitution();
+        $dispatcher = \App\Factory::getEventDispatcher();
         $plugin = \sample\Plugin::getInstance();
 
+        $institution = \App\Factory::getInstitution();
         if($institution && $plugin->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
             $config->getLog()->debug($plugin->getName() . ': Sample init client plugin stuff: ' . $institution->name);
             $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_INSTITUTION, $institution->getId()));
         }
-        /** @var \App\Db\Course $course */
+
         $course = \App\Factory::getCourse();
         if ($course && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE, $course->getId())) {
             $config->getLog()->debug($plugin->getName() . ': Sample init course plugin stuff: ' . $course->name);
             $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_COURSE, $course->getId()));
+        }
 
-            $profile = $course->getProfile();
-            if ($profile && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE_PROFILE, $profile->getId())) {
-                $config->getLog()->debug($plugin->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
-                $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_COURSE_PROFILE, $profile->getId()));
-            }
+        $profile = \App\Factory::getProfile();
+        if ($profile && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE_PROFILE, $profile->getId())) {
+            $config->getLog()->debug($plugin->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
+            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_COURSE_PROFILE, $profile->getId()));
         }
 
     }

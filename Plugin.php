@@ -72,6 +72,30 @@ class Plugin extends \Tk\Plugin\Iface
     }
 
     /**
+     * Example upgrade code
+     * This will be called when you update the plugin version in the composer.json file
+     *
+     * Upgrade the plugin
+     * Called when the file version is larger than the version in the DB table
+     *
+     * @param string $oldVersion
+     * @param string $newVersion
+     */
+    function doUpgrade($oldVersion, $newVersion) {
+        // Init Plugin Settings
+//        $config = \Tk\Config::getInstance();
+//        $db = \App\Factory::getDb();
+
+//        $migrate = new \Tk\Util\SqlMigrate($db);
+//        $migrate->setTempPath($config->getTempPath());
+//        $migrate->migrate(dirname(__FILE__) . '/sql');
+
+//        if (version_compare($oldVersion, '1.0.1', '<')) { ; }
+//        if (version_compare($oldVersion, '1.0.2', '<')) { ; }
+
+    }
+
+    /**
      * Deactivate the plugin removing any DB data and settings
      * Will only be called when deactivating the plugin in the
      * plugin control panel

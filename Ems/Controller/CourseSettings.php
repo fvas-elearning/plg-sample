@@ -6,10 +6,9 @@ use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
+use Ems\Plugin;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -48,8 +47,8 @@ class CourseSettings extends Iface
      */
     public function doDefault(Request $request)
     {
-        /** @var \sample\Plugin $plugin */
-        $plugin = \sample\Plugin::getInstance();
+        /** @var Plugin $plugin */
+        $plugin = Plugin::getInstance();
 
         $this->course = \App\Db\CourseMap::create()->find($request->get('zoneId'));
         //$this->course = \App\Factory::getCourse();

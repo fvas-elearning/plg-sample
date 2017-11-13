@@ -6,6 +6,7 @@ use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
+use Ems\Plugin;
 
 /**
  * Class Contact
@@ -35,8 +36,8 @@ class SystemSettings extends Iface
     {
         $this->setPageTitle('Example Plugin Settings');
 
-        /** @var \sample\Plugin $plugin */
-        $plugin = \sample\Plugin::getInstance();
+        /** @var Plugin $plugin */
+        $plugin = Plugin::getInstance();
         $this->data = \Tk\Db\Data::create($plugin->getName());
     }
 

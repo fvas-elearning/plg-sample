@@ -6,10 +6,9 @@ use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
+use Ems\Plugin;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -40,8 +39,8 @@ class InstitutionSettings extends Iface
     {
         $this->setPageTitle('Sample Plugin - Institution Settings');
 
-        /** @var \sample\Plugin $plugin */
-        $plugin = \sample\Plugin::getInstance();
+        /** @var Plugin $plugin */
+        $plugin = Plugin::getInstance();
         $this->institution = $this->getUser()->getInstitution();
         $this->data = \Tk\Db\Data::create($plugin->getName() . '.institution', $this->institution->getId());
 

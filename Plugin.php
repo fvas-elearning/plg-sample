@@ -1,12 +1,10 @@
 <?php
-namespace sample;
+namespace Ems;
 
 use Tk\Event\Dispatcher;
 
 
 /**
- * Class Plugin
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -21,7 +19,7 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * A helper method to get the Plugin instance globally
      *
-     * @return \Tk\Plugin\Iface
+     * @return static
      */
     static function getInstance()
     {

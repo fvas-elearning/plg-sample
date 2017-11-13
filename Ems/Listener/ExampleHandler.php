@@ -5,8 +5,8 @@ use Tk\Event\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
-use App\AppEvents;
 use Tk\Event\Event;
+use Ems\Plugin;
 
 /**
  * Class StartupHandler
@@ -35,7 +35,7 @@ class ExampleHandler implements Subscriber
      */
     public function onSystemInit(GetResponseEvent $event)
     {
-        //$this->plugin = \Eg\Plugin::getInstance();
+        //$this->plugin = Plugin::getInstance();
         //vd('Example: onSystemInit');
 
         //vd($event->getRequest()->getAttribute('courseCode'));
@@ -50,9 +50,9 @@ class ExampleHandler implements Subscriber
      */
     public function onControllerAccess(ControllerEvent $event)
     {
-        $plugin = \sample\Plugin::getInstance();
-        $config = $plugin->getConfig();
-        $config->getLog()->info($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
+        $plugin = Plugin::getInstance();
+        //$config = $plugin->getConfig();
+        \Tk\Log::info($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
 
     }
 
@@ -63,7 +63,7 @@ class ExampleHandler implements Subscriber
      */
     public function onControllerShow(Event $event)
     {
-        $plugin = \sample\Plugin::getInstance();
+        $plugin = Plugin::getInstance();
         $config = $plugin->getConfig();
         $config->getLog()->info($plugin->getName() . ': onControllerAccess(\''.$this->zoneName.'\', '.$this->zoneId.') ');
     }

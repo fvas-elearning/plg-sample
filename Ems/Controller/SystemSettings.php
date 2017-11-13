@@ -33,7 +33,6 @@ class SystemSettings extends Iface
      */
     public function __construct()
     {
-        parent::__construct();
         $this->setPageTitle('Example Plugin Settings');
 
         /** @var \sample\Plugin $plugin */

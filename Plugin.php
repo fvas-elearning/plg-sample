@@ -61,7 +61,11 @@ class Plugin extends \Tk\Plugin\Iface
      */
     function doActivate()
     {
-        // TODO: Implement doActivate() method.
+        // Use the migrate tool to import any sql files
+//        $db = $this->getConfig()->getDb();
+//        $migrate = new \Tk\Util\SqlMigrate($db);
+//        $migrate->setTempPath($this->getConfig()->getTempPath());
+//        $migrate->migrate(dirname(__FILE__) . '/sql');
 
         // Init Settings
         $data = \Tk\Db\Data::create($this->getName());
@@ -80,7 +84,8 @@ class Plugin extends \Tk\Plugin\Iface
      * @param string $oldVersion
      * @param string $newVersion
      */
-    function doUpgrade($oldVersion, $newVersion) {
+    function doUpgrade($oldVersion, $newVersion)
+    {
         // Init Plugin Settings
 //        $config = \Tk\Config::getInstance();
 //        $db = \App\Factory::getDb();
@@ -102,7 +107,13 @@ class Plugin extends \Tk\Plugin\Iface
      */
     function doDeactivate()
     {
-        // TODO: Implement doDeactivate() method.
+
+
+
+        // Remove migration track
+//        $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Util\SqlMigrate::$DB_TABLE), $db->quoteParameter('path'),
+//            $db->quote('/plugin/' . $this->getName().'/%'));
+//        $db->query($sql);
         
         // Delete any setting in the DB
         $data = \Tk\Db\Data::create($this->getName());

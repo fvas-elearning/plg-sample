@@ -1,12 +1,11 @@
 {
     "name": "ttek-plg/sample",
     "type": "ttek-plugin",
-    "description": "Example EMS III plugin",
+    "description": "Example Tk2 Lib plugin",
     "keywords":  [
         "tropotek",
         "plugin",
-        "example",
-        "EMS III"
+        "example"
     ],
     "homepage": "http://www.tropotek.com/",
     "time": "2017-09-27",
@@ -21,7 +20,7 @@
     ],
     "autoload":  {
         "psr-0":  {
-            "Ems\\": ""
+            "Eg\\": ""
         }
     },
     "extra":  {

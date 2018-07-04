@@ -1,21 +1,19 @@
 <?php
-namespace Ems\Controller;
+namespace Eg\Controller;
 
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
-use Ems\Plugin;
+use Eg\Plugin;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class SystemSettings extends Iface
+class InstitutionSettings extends Iface
 {
 
     /**
@@ -28,35 +26,45 @@ class SystemSettings extends Iface
      */
     protected $data = null;
 
-    
     /**
-     *
+     * TODO: Abstract out the institution object
+     * @var \Uni\Db\InstitutionIface
+     */
+    protected $institution = null;
+
+
+    /**
+     * InstitutionSettings constructor.
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
      */
     public function __construct()
     {
-        $this->setPageTitle('Example Plugin Settings');
+        $this->setPageTitle('Institution Settings');
 
         /** @var Plugin $plugin */
         $plugin = Plugin::getInstance();
-        $this->data = \Tk\Db\Data::create($plugin->getName());
+        $this->institution = $this->getUser()->getInstitution();
+        $this->data = \Tk\Db\Data::create($plugin->getName() . '.institution', $this->institution->getId());
+
     }
 
     /**
-     * doDefault
-     *
      * @param Request $request
+     * @throws Form\Exception
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
-        $this->form = \App\Factory::createForm('formEdit');
-        $this->form->setRenderer(\App\Factory::createFormRenderer($this->form));
+        $this->form = $this->getConfig()->createForm('institutionSettings');
+        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
         
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getCrumbs()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -64,11 +72,11 @@ class SystemSettings extends Iface
     }
 
     /**
-     * doSubmit()
-     *
      * @param Form $form
+     * @param \Tk\Form\Event\Iface $event
+     * @throws \Tk\Db\Exception
      */
-    public function doSubmit($form)
+    public function doSubmit($form, $event)
     {
         $values = $form->getValues();
         $this->data->replace($values);
@@ -87,10 +95,10 @@ class SystemSettings extends Iface
         $this->data->save();
         
         \Tk\Alert::addSuccess('Site settings saved.');
-        if ($form->getTriggeredEvent()->getName() == 'update') {
-            \Tk\Uri::create('/admin/plugins.html')->redirect();
+        $event->setRedirect($this->getConfig()->getBackUrl());
+        if ($form->getTriggeredEvent()->getName() == 'save') {
+            $event->setRedirect(\Tk\Uri::create());
         }
-        \Tk\Uri::create()->redirect();
     }
 
     /**
@@ -103,7 +111,7 @@ class SystemSettings extends Iface
         $template = parent::show();
         
         // Render the form
-        $template->insertTemplate($this->form->getId(), $this->form->getRenderer()->show()->getTemplate());
+        $template->insertTemplate('form', $this->form->getRenderer()->show()->getTemplate());
 
         return $template;
     }
@@ -128,7 +136,7 @@ class SystemSettings extends Iface
     <div class="panel panel-default">
       <div class="panel-heading"><i class="fa fa-cog"></i> Site Settings</div>
       <div class="panel-body">
-        <div var="formEdit"></div>
+        <div var="form"></div>
       </div>
     </div>
     

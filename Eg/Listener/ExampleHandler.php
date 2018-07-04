@@ -1,16 +1,14 @@
 <?php
-namespace Ems\Listener;
+namespace Eg\Listener;
 
 use Tk\Event\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
 use Tk\Event\Event;
-use Ems\Plugin;
+use Eg\Plugin;
 
 /**
- * Class StartupHandler
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -47,6 +45,7 @@ class ExampleHandler implements Subscriber
      * Check the user has access to this controller
      *
      * @param ControllerEvent $event
+     * @throws \Tk\Exception
      */
     public function onControllerAccess(ControllerEvent $event)
     {
@@ -60,6 +59,7 @@ class ExampleHandler implements Subscriber
      * Check the user has access to this controller
      *
      * @param Event $event
+     * @throws \Tk\Exception
      */
     public function onControllerShow(Event $event)
     {

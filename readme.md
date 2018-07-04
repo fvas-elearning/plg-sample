@@ -1,11 +1,11 @@
-# EMS III Example Plugin
+# Tk2 Example Plugin
 
 __Project:__ [ttek-plg/sample](http://packagist.org/packages/ttek-plg/sample)  
 __Published:__ 01 Sep 2016
 __Web:__ <http://www.tropotek.com/>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
   
-An sample Plugin for the new EMS III System. Use this to create your own plugins.
+An sample Plugin for the new Tk2 plugin system. Use this to create your own plugins.
 
 ## Contents
 

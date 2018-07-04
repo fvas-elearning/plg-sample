@@ -1,19 +1,19 @@
 <?php
-namespace Ems\Controller;
+namespace Eg\Controller;
 
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
-use Ems\Plugin;
+use Eg\Plugin;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class CourseSettings extends Iface
+class ProfileSettings extends Iface
 {
 
     /**
@@ -27,42 +27,43 @@ class CourseSettings extends Iface
     protected $data = null;
 
     /**
-     * @var \App\Db\Course
+     * TODO: we need to abstract out the Profile/Institution and subject form the plugins
+     * @var \Uni\Db\ProfileIface
      */
-    private $course = null;
+    private $profile = null;
 
 
     /**
-     *
+     * ProfileSettings constructor.
      */
     public function __construct()
     {
-        $this->setPageTitle('Sample Plugin - Course Settings');
+        $this->setPageTitle('Subject Profile Settings');
     }
 
     /**
-     * doDefault
-     *
      * @param Request $request
+     * @throws Form\Exception
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
         /** @var Plugin $plugin */
         $plugin = Plugin::getInstance();
 
-        $this->course = \App\Db\CourseMap::create()->find($request->get('zoneId'));
-        //$this->course = \App\Factory::getCourse();
-        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course', $this->course->getId());
+        $this->profile = \App\Db\ProfileMap::create()->find($request->get('zoneId'));
+        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course.profile', $this->profile->getId());
 
-        $this->form = \App\Factory::createForm('formEdit');
-        $this->form->setRenderer(\App\Factory::createFormRenderer($this->form));
+        $this->form = $this->getConfig()->createForm('profileSettings');
+        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
         
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getCrumbs()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -70,11 +71,11 @@ class CourseSettings extends Iface
     }
 
     /**
-     * doSubmit()
-     *
-     * @param Form $form
+     * @param \Tk\Form $form
+     * @param \Tk\Form\Event\Iface $event
+     * @throws \Tk\Db\Exception
      */
-    public function doSubmit($form)
+    public function doSubmit($form, $event)
     {
         $values = $form->getValues();
         $this->data->replace($values);
@@ -93,10 +94,11 @@ class CourseSettings extends Iface
         $this->data->save();
         
         \Tk\Alert::addSuccess('Settings saved.');
-        if ($form->getTriggeredEvent()->getName() == 'update') {
-            \App\Uri::createHomeUrl('/course/plugins.html')->set('courseId', $this->course->getId())->redirect();
+
+        $event->setRedirect($this->getConfig()->getBackUrl());
+        if ($form->getTriggeredEvent()->getName() == 'save') {
+            $event->setRedirect(\Tk\Uri::create());
         }
-        \Tk\Uri::create()->redirect();
     }
 
     /**
@@ -109,7 +111,7 @@ class CourseSettings extends Iface
         $template = parent::show();
         
         // Render the form
-        $template->insertTemplate($this->form->getId(), $this->form->getRenderer()->show()->getTemplate());
+        $template->insertTemplate('form', $this->form->getRenderer()->show()->getTemplate());
 
         return $template;
     }
@@ -132,9 +134,9 @@ class CourseSettings extends Iface
     </div>
   
     <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cog"></i> Site Settings</div>
+      <div class="panel-heading"><i class="fa fa-cog"></i> Settings</div>
       <div class="panel-body">
-        <div var="formEdit"></div>
+        <div var="form"></div>
       </div>
     </div>
     

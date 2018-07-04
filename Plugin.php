@@ -1,5 +1,5 @@
 <?php
-namespace Ems;
+namespace Eg;
 
 use Tk\Event\Dispatcher;
 
@@ -19,23 +19,23 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * A helper method to get the Plugin instance globally
      *
-     * @return static
+     * @return \Tk\Plugin\Iface|Plugin
+     * @throws \Tk\Exception
      */
     static function getInstance()
     {
-        return \Tk\Config::getInstance()->getPluginFactory()->getPlugin('sample');
+        return \App\Config::getInstance()->getPluginFactory()->getPlugin('sample');
     }
 
 
     // ---- \Tk\Plugin\Iface Interface Methods ----
-    
-    
+
+
     /**
      * Init the plugin
      *
      * This is called when the session first registers the plugin to the queue
      * So it is the first called method after the constructor.....
-     *
      */
     function doInit()
     {
@@ -47,16 +47,17 @@ class Plugin extends \Tk\Plugin\Iface
         $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_COURSE);
 
         /** @var Dispatcher $dispatcher */
-        $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
-        $dispatcher->addSubscriber(new \Ems\Listener\SetupHandler());
+        $dispatcher = \App\Config::getInstance()->getEventDispatcher();
+        $dispatcher->addSubscriber(new \Eg\Listener\SetupHandler());
     }
-    
+
     /**
      * Activate the plugin, essentially
      * installing any DB and settings required to run
      * Will only be called when activating the plugin in the
      * plugin control panel
      *
+     * @throws \Tk\Db\Exception
      */
     function doActivate()
     {
@@ -90,7 +91,6 @@ class Plugin extends \Tk\Plugin\Iface
 
 //        if (version_compare($oldVersion, '1.0.1', '<')) { ; }
 //        if (version_compare($oldVersion, '1.0.2', '<')) { ; }
-
     }
 
     /**
@@ -98,6 +98,7 @@ class Plugin extends \Tk\Plugin\Iface
      * Will only be called when deactivating the plugin in the
      * plugin control panel
      *
+     * @throws \Tk\Db\Exception
      */
     function doDeactivate()
     {

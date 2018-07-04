@@ -1,8 +1,8 @@
 <?php
-namespace Ems\Listener;
+namespace Tk\Listener;
 
 use Tk\Event\Subscriber;
-use Ems\Plugin;
+use Eg\Plugin;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -12,7 +12,11 @@ use Ems\Plugin;
 class SetupHandler implements Subscriber
 {
 
-
+    /**
+     * @param \Tk\Event\GetResponseEvent $event
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
+     */
     public function onRequest(\Tk\Event\GetResponseEvent $event)
     {
         /* NOTE:
@@ -22,31 +26,30 @@ class SetupHandler implements Subscriber
          *  the institution object, unless you manually save the id in the
          *  session on first page load?
          */
-        //$config = \Tk\Config::getInstance();
-        $dispatcher = \App\Factory::getEventDispatcher();
+        $config = \App\Config::getInstance();
+        $dispatcher = $config->getEventDispatcher();
         $plugin = Plugin::getInstance();
 
-        $institution = \App\Factory::getInstitution();
-        if($institution && $plugin->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
-            \Tk\Log::debug($plugin->getName() . ': Sample init client plugin stuff: ' . $institution->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_INSTITUTION, $institution->getId()));
-        }
 
-        $course = \App\Factory::getCourse();
-        if ($course && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE, $course->getId())) {
-            \Tk\Log::debug($plugin->getName() . ': Sample init course plugin stuff: ' . $course->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_COURSE, $course->getId()));
-        }
-
-        $profile = \App\Factory::getProfile();
-        if ($profile && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE_PROFILE, $profile->getId())) {
-            \Tk\Log::debug($plugin->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
-            $dispatcher->addSubscriber(new \Ems\Listener\ExampleHandler(Plugin::ZONE_COURSE_PROFILE, $profile->getId()));
+        if (class_exists('/Uni/Config') && $config instanceof \Uni\Config) {
+            $institution = $config->getInstitution();
+            if ($institution && $plugin->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
+                \Tk\Log::debug($plugin->getName() . ': Sample init client plugin stuff: ' . $institution->name);
+                $dispatcher->addSubscriber(new \Eg\Listener\ExampleHandler(Plugin::ZONE_INSTITUTION, $institution->getId()));
+            }
+            $course = $config->getCourse();
+            if ($course && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE, $course->getId())) {
+                \Tk\Log::debug($plugin->getName() . ': Sample init course plugin stuff: ' . $course->name);
+                $dispatcher->addSubscriber(new \Eg\Listener\ExampleHandler(Plugin::ZONE_COURSE, $course->getId()));
+            }
+            $profile = $config->getProfile();
+            if ($profile && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE_PROFILE, $profile->getId())) {
+                \Tk\Log::debug($plugin->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
+                $dispatcher->addSubscriber(new \Eg\Listener\ExampleHandler(Plugin::ZONE_COURSE_PROFILE, $profile->getId()));
+            }
         }
 
     }
-
-
 
     public function onInit(\Tk\Event\KernelEvent $event)
     {
@@ -57,7 +60,6 @@ class SetupHandler implements Subscriber
     {
         //vd('onController');
     }
-    
 
     /**
      * Returns an array of event names this subscriber wants to listen to.

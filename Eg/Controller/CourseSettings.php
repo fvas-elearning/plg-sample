@@ -1,19 +1,19 @@
 <?php
-namespace Ems\Controller;
+namespace Eg\Controller;
 
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
-use Ems\Plugin;
+use Eg\Plugin;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class ProfileSettings extends Iface
+class CourseSettings extends Iface
 {
 
     /**
@@ -27,41 +27,44 @@ class ProfileSettings extends Iface
     protected $data = null;
 
     /**
-     * @var \App\Db\Profile
+     * TODO: Abstract these objects out of the plugin system
+     * @var \Uni\Db\CourseIface
      */
-    private $profile = null;
+    private $course = null;
 
 
     /**
-     *
+     * CourseSettings constructor.
      */
     public function __construct()
     {
-        $this->setPageTitle('Sample Plugin - Course Profile Settings');
+        $this->setPageTitle('Course Settings');
     }
 
     /**
-     * doDefault
-     *
      * @param Request $request
+     * @throws Form\Exception
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
         /** @var Plugin $plugin */
         $plugin = Plugin::getInstance();
 
-        $this->profile = \App\Db\ProfileMap::create()->find($request->get('zoneId'));
-        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course.profile', $this->profile->getId());
+        $this->course = \App\Db\CourseMap::create()->find($request->get('zoneId'));
+        //$this->course = $this->getConfig()->getCourse();
+        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course', $this->course->getId());
 
-        $this->form = \App\Factory::createForm('formEdit');
-        $this->form->setRenderer(\App\Factory::createFormRenderer($this->form));
+        $this->form = $this->getConfig()->createForm('courseSettings');
+        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
         
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getCrumbs()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -71,9 +74,11 @@ class ProfileSettings extends Iface
     /**
      * doSubmit()
      *
-     * @param Form $form
+     * @param \Tk\Form $form
+     * @param \Tk\Form\Event\Iface $event
+     * @throws \Tk\Db\Exception
      */
-    public function doSubmit($form)
+    public function doSubmit($form, $event)
     {
         $values = $form->getValues();
         $this->data->replace($values);
@@ -92,10 +97,10 @@ class ProfileSettings extends Iface
         $this->data->save();
         
         \Tk\Alert::addSuccess('Settings saved.');
-        if ($form->getTriggeredEvent()->getName() == 'update') {
-            \App\Uri::createHomeUrl('/course/profilePlugins.html')->set('profileId', $this->profile->getId())->redirect();
+        $event->setRedirect($this->getConfig()->getBackUrl());
+        if ($form->getTriggeredEvent()->getName() == 'save') {
+            $event->setRedirect(\Tk\Uri::create());
         }
-        \Tk\Uri::create()->redirect();
     }
 
     /**
@@ -131,7 +136,7 @@ class ProfileSettings extends Iface
     </div>
   
     <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cog"></i> Settings</div>
+      <div class="panel-heading"><i class="fa fa-cog"></i> Site Settings</div>
       <div class="panel-body">
         <div var="formEdit"></div>
       </div>

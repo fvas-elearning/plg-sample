@@ -65,8 +65,8 @@ class Plugin extends \Tk\Plugin\Iface
 
         // Init Settings
         $data = \Tk\Db\Data::create($this->getName());
-        $data->set('plugin.title', 'EMS III Example Plugin');
-        $data->set('plugin.email', 'null@unimelb.edu.au');
+        $data->set('plugin.title', 'Tk2 Sample Plugin');
+        $data->set('plugin.email', 'noreply@example.com');
         $data->save();
     }
 

@@ -1,5 +1,5 @@
 <?php
-namespace Tk\Listener;
+namespace Eg\Listener;
 
 use Tk\Event\Subscriber;
 use Eg\Plugin;

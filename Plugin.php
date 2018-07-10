@@ -1,5 +1,5 @@
 <?php
-namespace Eg;
+namespace Tk\Eg;
 
 use Tk\Event\Dispatcher;
 
@@ -14,7 +14,7 @@ class Plugin extends \Tk\Plugin\Iface
 
     const ZONE_INSTITUTION = 'institution';
     const ZONE_COURSE_PROFILE = 'profile';
-    const ZONE_COURSE = 'course';
+    const ZONE_SUBJECT = 'subject';
 
     /**
      * A helper method to get the Plugin instance globally
@@ -44,11 +44,11 @@ class Plugin extends \Tk\Plugin\Iface
         // Register the plugin for the different client areas if they are to be enabled/disabled/configured by those roles.
         $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
         $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_COURSE_PROFILE);
-        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_COURSE);
+        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_SUBJECT);
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = \App\Config::getInstance()->getEventDispatcher();
-        $dispatcher->addSubscriber(new \Eg\Listener\SetupHandler());
+        $dispatcher->addSubscriber(new \Tk\Eg\Listener\SetupHandler());
     }
 
     /**
@@ -130,11 +130,11 @@ class Plugin extends \Tk\Plugin\Iface
     {
         switch ($zoneName) {
             case self::ZONE_INSTITUTION:
-                return \Tk\Uri::create('/sample/institutionSettings.html');
+                return \Tk\Uri::create('/sampleInstitutionSettings.html');
             case self::ZONE_COURSE_PROFILE:
-                return \Tk\Uri::create('/sample/courseProfileSettings.html');
-            case self::ZONE_COURSE:
-                return \Tk\Uri::create('/sample/courseSettings.html');
+                return \Tk\Uri::create('/sampleSubjectProfileSettings.html');
+            case self::ZONE_SUBJECT:
+                return \Tk\Uri::create('/sampleSubjectSettings.html');
         }
         return null;
     }
@@ -144,7 +144,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     public function getSettingsUrl()
     {
-        return \Tk\Uri::create('/sample/adminSettings.html');
+        return \Tk\Uri::create('/sampleSettings.html');
     }
 
 }

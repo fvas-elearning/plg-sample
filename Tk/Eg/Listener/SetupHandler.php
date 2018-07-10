@@ -1,8 +1,8 @@
 <?php
-namespace Eg\Listener;
+namespace Tk\Eg\Listener;
 
 use Tk\Event\Subscriber;
-use Eg\Plugin;
+use Tk\Eg\Plugin;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -35,17 +35,17 @@ class SetupHandler implements Subscriber
             $institution = $config->getInstitution();
             if ($institution && $plugin->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
                 \Tk\Log::debug($plugin->getName() . ': Sample init client plugin stuff: ' . $institution->name);
-                $dispatcher->addSubscriber(new \Eg\Listener\ExampleHandler(Plugin::ZONE_INSTITUTION, $institution->getId()));
+                $dispatcher->addSubscriber(new \Tk\Eg\Listener\ExampleHandler(Plugin::ZONE_INSTITUTION, $institution->getId()));
             }
             $course = $config->getCourse();
             if ($course && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE, $course->getId())) {
                 \Tk\Log::debug($plugin->getName() . ': Sample init course plugin stuff: ' . $course->name);
-                $dispatcher->addSubscriber(new \Eg\Listener\ExampleHandler(Plugin::ZONE_COURSE, $course->getId()));
+                $dispatcher->addSubscriber(new \Tk\Eg\Listener\ExampleHandler(Plugin::ZONE_COURSE, $course->getId()));
             }
             $profile = $config->getProfile();
             if ($profile && $plugin->isZonePluginEnabled(Plugin::ZONE_COURSE_PROFILE, $profile->getId())) {
                 \Tk\Log::debug($plugin->getName() . ': Sample init course profile plugin stuff: ' . $profile->name);
-                $dispatcher->addSubscriber(new \Eg\Listener\ExampleHandler(Plugin::ZONE_COURSE_PROFILE, $profile->getId()));
+                $dispatcher->addSubscriber(new \Tk\Eg\Listener\ExampleHandler(Plugin::ZONE_COURSE_PROFILE, $profile->getId()));
             }
         }
 

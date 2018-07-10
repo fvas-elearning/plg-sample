@@ -1,19 +1,20 @@
 <?php
-namespace Eg\Controller;
+namespace Tk\Eg\Controller;
 
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use App\Controller\Iface;
-use Eg\Plugin;
+use Tk\Eg\Plugin;
 
 /**
+ * Class Contact
+ *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class ProfileSettings extends Iface
+class SystemSettings extends \Bs\Controller\AdminIface
 {
 
     /**
@@ -26,36 +27,29 @@ class ProfileSettings extends Iface
      */
     protected $data = null;
 
-    /**
-     * TODO: we need to abstract out the Profile/Institution and subject form the plugins
-     * @var \Uni\Db\ProfileIface
-     */
-    private $profile = null;
-
 
     /**
-     * ProfileSettings constructor.
+     * SystemSettings constructor.
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
      */
     public function __construct()
     {
-        $this->setPageTitle('Subject Profile Settings');
+        $this->setPageTitle('Plugin Settings');
+
+        /** @var Plugin $plugin */
+        $plugin = Plugin::getInstance();
+        $this->data = \Tk\Db\Data::create($plugin->getName());
     }
 
     /**
      * @param Request $request
      * @throws Form\Exception
-     * @throws \Tk\Db\Exception
      * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
-        /** @var Plugin $plugin */
-        $plugin = Plugin::getInstance();
-
-        $this->profile = \App\Db\ProfileMap::create()->find($request->get('zoneId'));
-        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course.profile', $this->profile->getId());
-
-        $this->form = $this->getConfig()->createForm('profileSettings');
+        $this->form = $this->getConfig()->createForm('systemSettings');
         $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
@@ -67,7 +61,6 @@ class ProfileSettings extends Iface
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
-
     }
 
     /**
@@ -93,8 +86,7 @@ class ProfileSettings extends Iface
         
         $this->data->save();
         
-        \Tk\Alert::addSuccess('Settings saved.');
-
+        \Tk\Alert::addSuccess('Site settings saved.');
         $event->setRedirect($this->getConfig()->getBackUrl());
         if ($form->getTriggeredEvent()->getName() == 'save') {
             $event->setRedirect(\Tk\Uri::create());
@@ -125,16 +117,9 @@ class ProfileSettings extends Iface
     {
         $xhtml = <<<XHTML
 <div var="content">
-
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cogs fa-fw"></i> Actions</div>
-      <div class="panel-body " var="action-panel">
-        <a href="javascript: window.history.back();" class="btn btn-default"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
-      </div>
-    </div>
   
     <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cog"></i> Settings</div>
+      <div class="panel-heading"><i class="fa fa-cog"></i> Site Settings</div>
       <div class="panel-body">
         <div var="form"></div>
       </div>

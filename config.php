@@ -10,15 +10,15 @@ if ($composer)
 $routes = $config['site.routes'];
 
 $params = array('role' => 'admin');
-$routes->add('Sample Admin Settings', new \Tk\Routing\Route('/sample/adminSettings.html', 'Eg\Controller\SystemSettings::doDefault', $params));
+$routes->add('sample-admin-settings', new \Tk\Routing\Route('/sampleSettings.html', 'Tk\Eg\Controller\SystemSettings::doDefault', $params));
 
 $params = array('role' => array('admin', 'client'));
-$routes->add('Sample Institution Settings', new \Tk\Routing\Route('/sample/institutionSettings.html', 'Eg\Controller\InstitutionSettings::doDefault', $params));
+$routes->add('sample-institution-settings', new \Tk\Routing\Route('/sampleInstitutionSettings.html', 'Tk\Eg\Controller\InstitutionSettings::doDefault', $params));
 
 $params = array('role' => array('client', 'staff'));
-$routes->add('Sample Course Profile Settings', new \Tk\Routing\Route('/sample/courseProfileSettings.html', 'Eg\Controller\CourseProfileSettings::doDefault', $params));
+$routes->add('sample-profile-settings', new \Tk\Routing\Route('/sampleProfileSettings.html', 'Tk\Eg\Controller\ProfileSettings::doDefault', $params));
 
 $params = array('role' => array('client', 'staff'));
-$routes->add('Sample Course Settings', new \Tk\Routing\Route('/sample/courseSettings.html', 'Eg\Controller\CourseSettings::doDefault', $params));
+$routes->add('sample-subject-settings', new \Tk\Routing\Route('/sampleSubjectSettings.html', 'Tk\Eg\Controller\SubjectSettings::doDefault', $params));
 
 

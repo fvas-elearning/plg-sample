@@ -1,19 +1,18 @@
 <?php
-namespace Eg\Controller;
+namespace Tk\Eg\Controller;
 
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use App\Controller\Iface;
-use Eg\Plugin;
+use Tk\Eg\Plugin;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class InstitutionSettings extends Iface
+class SubjectSettings extends \Bs\Controller\AdminIface
 {
 
     /**
@@ -27,36 +26,36 @@ class InstitutionSettings extends Iface
     protected $data = null;
 
     /**
-     * TODO: Abstract out the institution object
-     * @var \Uni\Db\InstitutionIface
+     * TODO: Abstract these objects out of the plugin system
+     * @var \Uni\Db\SubjectIface
      */
-    protected $institution = null;
+    private $subject = null;
 
 
     /**
-     * InstitutionSettings constructor.
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * CourseSettings constructor.
      */
     public function __construct()
     {
-        $this->setPageTitle('Institution Settings');
-
-        /** @var Plugin $plugin */
-        $plugin = Plugin::getInstance();
-        $this->institution = $this->getUser()->getInstitution();
-        $this->data = \Tk\Db\Data::create($plugin->getName() . '.institution', $this->institution->getId());
-
+        $this->setPageTitle('Course Settings');
     }
 
     /**
      * @param Request $request
      * @throws Form\Exception
+     * @throws \Tk\Db\Exception
      * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
-        $this->form = $this->getConfig()->createForm('institutionSettings');
+        /** @var Plugin $plugin */
+        $plugin = Plugin::getInstance();
+
+        $this->subject = \Uni\Db\SubjectMap::create()->find($request->get('zoneId'));
+        //$this->course = $this->getConfig()->getCourse();
+        $this->data = \Tk\Db\Data::create($plugin->getName() . '.course', $this->subject->getId());
+
+        $this->form = $this->getConfig()->createForm('courseSettings');
         $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
@@ -72,7 +71,9 @@ class InstitutionSettings extends Iface
     }
 
     /**
-     * @param Form $form
+     * doSubmit()
+     *
+     * @param \Tk\Form $form
      * @param \Tk\Form\Event\Iface $event
      * @throws \Tk\Db\Exception
      */
@@ -94,7 +95,7 @@ class InstitutionSettings extends Iface
         
         $this->data->save();
         
-        \Tk\Alert::addSuccess('Site settings saved.');
+        \Tk\Alert::addSuccess('Settings saved.');
         $event->setRedirect($this->getConfig()->getBackUrl());
         if ($form->getTriggeredEvent()->getName() == 'save') {
             $event->setRedirect(\Tk\Uri::create());
@@ -125,18 +126,11 @@ class InstitutionSettings extends Iface
     {
         $xhtml = <<<XHTML
 <div var="content">
-
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cogs fa-fw"></i> Actions</div>
-      <div class="panel-body " var="action-panel">
-        <a href="javascript: window.history.back();" class="btn btn-default"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
-      </div>
-    </div>
   
     <div class="panel panel-default">
       <div class="panel-heading"><i class="fa fa-cog"></i> Site Settings</div>
       <div class="panel-body">
-        <div var="form"></div>
+        <div var="formEdit"></div>
       </div>
     </div>
     

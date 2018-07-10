@@ -1,12 +1,12 @@
 <?php
-namespace Eg\Listener;
+namespace Tk\Eg\Listener;
 
 use Tk\Event\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
 use Tk\Event\Event;
-use Eg\Plugin;
+use Tk\Eg\Plugin;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>

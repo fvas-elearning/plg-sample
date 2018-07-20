@@ -130,11 +130,11 @@ class Plugin extends \Tk\Plugin\Iface
     {
         switch ($zoneName) {
             case self::ZONE_INSTITUTION:
-                return \Tk\Uri::create('/sampleInstitutionSettings.html');
+                return \Bs\Uri::createHomeUrl('/sampleInstitutionSettings.html');
             case self::ZONE_COURSE_PROFILE:
-                return \Tk\Uri::create('/sampleSubjectProfileSettings.html');
+                return \Bs\Uri::createHomeUrl('/sampleSubjectProfileSettings.html');
             case self::ZONE_SUBJECT:
-                return \Tk\Uri::create('/sampleSubjectSettings.html');
+                return \Bs\Uri::createHomeUrl('/sampleSubjectSettings.html');
         }
         return null;
     }
@@ -144,7 +144,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     public function getSettingsUrl()
     {
-        return \Tk\Uri::createHomeUrl('/sampleSettings.html');
+        return \Bs\Uri::createHomeUrl('/sampleSettings.html');
     }
 
 }

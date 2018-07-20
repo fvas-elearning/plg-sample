@@ -1,24 +1,21 @@
 <?php
-$config = \Tk\Config::getInstance();
+$config = \App\Config::getInstance();
+$routes = $config->getRouteCollection();
+if (!$routes) return;
 
 /** @var \Composer\Autoload\ClassLoader $composer */
 $composer = $config->getComposer();
 if ($composer)
-    $composer->add('Eg\\', dirname(__FILE__));
+    $composer->add('Tk\\Eg\\', dirname(__FILE__));
 
-/** @var \Tk\Routing\RouteCollection $routes */
-$routes = $config['site.routes'];
 
-$params = array('role' => 'admin');
-$routes->add('sample-admin-settings', new \Tk\Routing\Route('/sampleSettings.html', 'Tk\Eg\Controller\SystemSettings::doDefault', $params));
+$routes->add('sample-admin-settings', new \Tk\Routing\Route('/admin/sampleSettings.html', 'Tk\Eg\Controller\SystemSettings::doDefault'));
 
-$params = array('role' => array('admin', 'client'));
-$routes->add('sample-institution-settings', new \Tk\Routing\Route('/sampleInstitutionSettings.html', 'Tk\Eg\Controller\InstitutionSettings::doDefault', $params));
+$routes->add('sample-client-institution-settings', new \Tk\Routing\Route('/client/sampleInstitutionSettings.html', 'Tk\Eg\Controller\InstitutionSettings::doDefault'));
+$routes->add('sample-client-profile-settings', new \Tk\Routing\Route('/client/sampleProfileSettings.html', 'Tk\Eg\Controller\ProfileSettings::doDefault'));
+$routes->add('sample-client-subject-settings', new \Tk\Routing\Route('/client/sampleSubjectSettings.html', 'Tk\Eg\Controller\SubjectSettings::doDefault'));
 
-$params = array('role' => array('client', 'staff'));
-$routes->add('sample-profile-settings', new \Tk\Routing\Route('/sampleProfileSettings.html', 'Tk\Eg\Controller\ProfileSettings::doDefault', $params));
-
-$params = array('role' => array('client', 'staff'));
-$routes->add('sample-subject-settings', new \Tk\Routing\Route('/sampleSubjectSettings.html', 'Tk\Eg\Controller\SubjectSettings::doDefault', $params));
+$routes->add('sample-staff-profile-settings', new \Tk\Routing\Route('/staff/sampleProfileSettings.html', 'Tk\Eg\Controller\ProfileSettings::doDefault'));
+$routes->add('sample-staff-subject-settings', new \Tk\Routing\Route('/staff/sampleSubjectSettings.html', 'Tk\Eg\Controller\SubjectSettings::doDefault'));
 
 

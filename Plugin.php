@@ -144,7 +144,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     public function getSettingsUrl()
     {
-        return \Tk\Uri::create('/sampleSettings.html');
+        return \Tk\Uri::createHomeUrl('/sampleSettings.html');
     }
 
 }

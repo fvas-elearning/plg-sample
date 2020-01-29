@@ -43,7 +43,7 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
 
         /** @var Plugin $plugin */
         $plugin = Plugin::getInstance();
-        $this->institution = $this->getUser()->getInstitution();
+        $this->institution = $this->getAuthUser()->getInstitution();
         $this->data = \Tk\Db\Data::create($plugin->getName() . '.institution', $this->institution->getId());
 
     }

@@ -1,6 +1,6 @@
 {
-    "name": "ttek-plg/sample",
-    "type": "ttek-plugin",
+    "name": "uom-plg/sample",
+    "type": "uom-plugin",
     "description": "Example Tk2 Lib plugin",
     "keywords":  [
         "tropotek",
